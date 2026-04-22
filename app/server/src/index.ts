@@ -1,12 +1,18 @@
 import express from 'express';
 import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import db from './db.js';
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
-const PORT = 3002;
+const PORT = process.env.PORT ? Number(process.env.PORT) : 3002;
 
 app.use(cors());
 app.use(express.json());
+
+// Serve frontend static files
+app.use(express.static(path.join(__dirname, '../../client/dist')));
 
 // ============ Categories API ============
 
@@ -190,6 +196,11 @@ function getDescendantCategoryIds(parentId: number): number[] {
   return ids;
 }
 
-app.listen(PORT, () => {
-  console.log(`PRD Server running on http://localhost:${PORT}`);
+// SPA fallback — all non-API routes serve index.html
+app.get('*', (_req, res) => {
+  res.sendFile(path.join(__dirname, '../../client/dist/index.html'));
+});
+
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`PRD Server running on http://0.0.0.0:${PORT}`);
 });
