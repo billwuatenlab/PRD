@@ -1,15 +1,88 @@
-import Database from 'better-sqlite3';
+import initSqlJs, { Database as SqlJsDatabase } from 'sql.js';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DB_PATH = path.join(__dirname, '..', 'data', 'prd.db');
 
 // Ensure data directory exists
-import fs from 'fs';
 fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
 
-const db = new Database(DB_PATH);
+// Initialize sql.js
+const SQL = await initSqlJs();
+
+// Load existing DB or create new one
+let sqlDb: SqlJsDatabase;
+if (fs.existsSync(DB_PATH)) {
+  const buffer = fs.readFileSync(DB_PATH);
+  sqlDb = new SQL.Database(buffer);
+} else {
+  sqlDb = new SQL.Database();
+}
+
+// Auto-save to disk after writes
+function saveToDisk() {
+  const data = sqlDb.export();
+  const buffer = Buffer.from(data);
+  fs.writeFileSync(DB_PATH, buffer);
+}
+
+// Compatibility wrapper to match better-sqlite3 API
+class PreparedStatement {
+  constructor(private db: SqlJsDatabase, private sql: string) {}
+
+  all(...params: any[]): any[] {
+    const flatParams = params.length === 1 && Array.isArray(params[0]) ? params[0] : params;
+    const stmt = this.db.prepare(this.sql);
+    stmt.bind(flatParams.length > 0 ? flatParams : undefined);
+    const results: any[] = [];
+    while (stmt.step()) {
+      results.push(stmt.getAsObject());
+    }
+    stmt.free();
+    return results;
+  }
+
+  get(...params: any[]): any {
+    const flatParams = params.length === 1 && Array.isArray(params[0]) ? params[0] : params;
+    const stmt = this.db.prepare(this.sql);
+    stmt.bind(flatParams.length > 0 ? flatParams : undefined);
+    let result: any = undefined;
+    if (stmt.step()) {
+      result = stmt.getAsObject();
+    }
+    stmt.free();
+    return result;
+  }
+
+  run(...params: any[]): { lastInsertRowid: number; changes: number } {
+    const flatParams = params.length === 1 && Array.isArray(params[0]) ? params[0] : params;
+    this.db.run(this.sql, flatParams.length > 0 ? flatParams : undefined);
+    const lastInsertRowid = (this.db.exec("SELECT last_insert_rowid() as id")[0]?.values[0]?.[0] as number) || 0;
+    const changes = this.db.getRowsModified();
+    saveToDisk();
+    return { lastInsertRowid, changes };
+  }
+}
+
+const db = {
+  prepare(sql: string) {
+    return new PreparedStatement(sqlDb, sql);
+  },
+  exec(sql: string) {
+    sqlDb.run(sql);
+    saveToDisk();
+  },
+  pragma(value: string) {
+    try {
+      sqlDb.run(`PRAGMA ${value}`);
+    } catch (_) {
+      // Some pragmas may not be supported in sql.js
+    }
+  },
+};
+
 db.pragma('journal_mode = WAL');
 db.pragma('foreign_keys = ON');
 
