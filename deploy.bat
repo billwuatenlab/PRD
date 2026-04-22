@@ -38,7 +38,7 @@ echo.
 echo [4/5] Building backend...
 cd /d C:\PRD\app\server
 call npm install
-call npm run build
+call npx tsc
 echo.
 
 :: Step 5 — Start server
