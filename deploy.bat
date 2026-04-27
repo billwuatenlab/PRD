@@ -44,7 +44,7 @@ echo.
 :: Step 5 — Start server
 echo [5/5] Starting PRD server...
 echo ============================================
-echo   PRD is running at http://localhost:3002
+echo   PRD is running at http://localhost:58001
 echo   Press Ctrl+C to stop
 echo ============================================
 node dist/index.js

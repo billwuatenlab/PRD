@@ -6,11 +6,45 @@
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 14.08px;
 }
 
 .prd-row-hover:hover > td {
   background-color: #e6f4ff !important;
   transition: background-color 0.2s;
+}
+
+/* Compact row height: ~0.8x the antd "small" default. Trim vertical cell padding. */
+.prd-compact-table .ant-table-cell {
+  padding-top: 3px !important;
+  padding-bottom: 3px !important;
+  line-height: 1.4;
+}
+.prd-compact-table .ant-table-thead > tr > th {
+  padding-top: 4px !important;
+  padding-bottom: 4px !important;
+}
+
+/* Drop-target "反光" — solid blue with pulsing border */
+.prd-drop-target > td,
+.prd-drop-target-col {
+  background-color: #bae7ff !important;
+  animation: prdPulse 2s ease-in-out infinite;
+}
+
+.prd-drop-target-col {
+  border-radius: 3px;
+  padding: 2px 4px;
+  margin: -2px -4px;
+}
+
+@keyframes prdPulse {
+  0%, 100% {
+    box-shadow: inset 0 0 0 2px #1677ff;
+  }
+  50% {
+    box-shadow: inset 0 0 0 3px #0958d9, 0 0 16px rgba(22,119,255,0.9);
+  }
 }
 
 #root {
@@ -39,4 +73,49 @@ body {
 
 .category-tree .ant-tree-title {
   width: 100%;
+}
+
+/* Sider category tree (dark theme) */
+.prd-sider-tree .ant-tree {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.85);
+}
+.prd-sider-tree .ant-tree-treenode {
+  padding: 0;
+  width: 100%;
+}
+.prd-sider-tree .ant-tree-node-content-wrapper {
+  color: rgba(255, 255, 255, 0.85);
+  width: 100%;
+  min-width: 0;
+}
+.prd-sider-tree .ant-tree-node-content-wrapper:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+.prd-sider-tree .ant-tree-node-selected,
+.prd-sider-tree .ant-tree-node-content-wrapper.ant-tree-node-selected {
+  background: #1677ff !important;
+  color: #fff !important;
+}
+.prd-sider-tree .ant-tree-switcher {
+  color: rgba(255, 255, 255, 0.5);
+}
+.prd-sider-tree .ant-tree-title {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.prd-sider-tree .ant-tree-indent-unit {
+  width: 16px;
+}
+
+/* Drop indicator visible against dark Sider background */
+.prd-sider-tree .ant-tree-drop-indicator {
+  background-color: #69b1ff !important;
+  height: 3px;
+}
+.prd-sider-tree .ant-tree-treenode-drop-container > .ant-tree-node-content-wrapper {
+  background-color: rgba(105, 177, 255, 0.18) !important;
+  outline: 1px dashed #69b1ff;
 }

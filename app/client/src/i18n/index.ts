@@ -2,7 +2,7 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
 const zhTW = {
-  app: { title: 'PRD 產品資料庫', shortTitle: 'PRD' },
+  app: { title: 'PRD-SYS', shortTitle: 'PRD' },
   menu: { dashboard: '總覽', products: '產品列表', edit: '產品編輯', quotation: '報價單', system: '系統管理' },
   products: {
     search: '搜尋 PN / 名稱 / 備註...',
@@ -66,7 +66,7 @@ const zhTW = {
 };
 
 const en = {
-  app: { title: 'PRD Product Database', shortTitle: 'PRD' },
+  app: { title: 'PRD-SYS', shortTitle: 'PRD' },
   menu: { dashboard: 'Dashboard', products: 'Products', edit: 'Product Edit', quotation: 'Quotation', system: 'System' },
   products: {
     search: 'Search PN / Name / Note...',

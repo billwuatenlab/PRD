@@ -14,6 +14,7 @@ import {
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAppStore } from '../store/app';
+import CategoryTree from '../components/CategoryTree';
 
 const { Sider, Content, Header } = Layout;
 
@@ -57,6 +58,15 @@ export default function MainLayout() {
     />
   );
 
+  const onProductsPage = location.pathname.startsWith('/products');
+
+  const siderInner = (showTree: boolean) => (
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0 }}>
+      <div style={{ flexShrink: 0 }}>{menuContent}</div>
+      {showTree && onProductsPage && <CategoryTree />}
+    </div>
+  );
+
   return (
     <Layout style={{ minHeight: '100vh' }}>
       {isMobile && (
@@ -68,14 +78,16 @@ export default function MainLayout() {
           styles={{ body: { padding: 0, background: '#001529' } }}
           closable={false}
         >
-          <div style={{
-            height: 64, display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: '#fff', fontSize: 20, fontWeight: 'bold', background: '#001529', gap: 8,
-          }}>
-            <DatabaseOutlined />
-            {t('app.title')}
+          <div style={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0 }}>
+            <div style={{
+              height: 64, display: 'flex', alignItems: 'center', justifyContent: 'center',
+              color: '#fff', fontSize: 20, fontWeight: 'bold', background: '#001529', gap: 8, flexShrink: 0,
+            }}>
+              <DatabaseOutlined />
+              {t('app.title')}
+            </div>
+            {siderInner(true)}
           </div>
-          {menuContent}
         </Drawer>
       )}
 
@@ -84,17 +96,19 @@ export default function MainLayout() {
           trigger={null}
           collapsible
           collapsed={sidebarCollapsed}
-          style={{ background: '#001529' }}
-          width={220}
+          style={{ background: '#001529', height: '100vh', position: 'sticky', top: 0, overflow: 'hidden' }}
+          width={240}
         >
-          <div style={{
-            height: 64, display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: '#fff', fontSize: sidebarCollapsed ? 16 : 20, fontWeight: 'bold', gap: 8,
-          }}>
-            <DatabaseOutlined />
-            {!sidebarCollapsed && t('app.shortTitle')}
+          <div style={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0 }}>
+            <div style={{
+              height: 64, display: 'flex', alignItems: 'center', justifyContent: 'center',
+              color: '#fff', fontSize: sidebarCollapsed ? 16 : 20, fontWeight: 'bold', gap: 8, flexShrink: 0,
+            }}>
+              <DatabaseOutlined />
+              {!sidebarCollapsed && t('app.shortTitle')}
+            </div>
+            {siderInner(!sidebarCollapsed)}
           </div>
-          {menuContent}
         </Sider>
       )}
 

@@ -44,3 +44,20 @@
 - **這兩個檔案為追加式更新**
 
 *On error: record in MST. On important discussion: record in QA. Both files use append-mode.*
+
+## 「上次做到哪裡」查詢格式 / "Last session status" query format
+
+**當使用者詢問進度（「記得上次做到哪嗎」、「上次做到哪裡」等）時：**
+- **回覆主體呈現 commits、未提交修改、進行中工作**
+- **所有時間戳記（最後 commit 日期、session 時間）必須放在回覆的最下面**
+
+*When user asks about progress ("where did we leave off" etc.):*
+- *Main body: show commits, uncommitted changes, work in progress*
+- *All timestamps (last commit date, session time) MUST go at the BOTTOM of the response*
+
+## 終端機名稱 / Terminal Name
+
+- **本專案 `.app` 啟動時，iTerm 分頁名稱為 `🟡 PRD`**
+- **由 `EXE/PRD.app` 和 Desktop 上的 `PRD.app` 的 AppleScript `set name` 指令設定**
+
+*The PRD `.app` launcher sets iTerm tab name to `🟡 PRD` via AppleScript `set name`.*

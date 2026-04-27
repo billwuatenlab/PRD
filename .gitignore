@@ -3,3 +3,14 @@ node_modules/
 *.app
 .vite/
 dist/
+.dev-logs/
+
+# TypeScript incremental build cache
+tsconfig.tsbuildinfo
+*.tsbuildinfo
+
+# SQLite DB backups (live prd.db is tracked; rollback snapshots are not)
+app/server/data/prd.db.backup-*
+app/server/data/prd.db.before-*
+app/server/data/prd.db-shm
+app/server/data/prd.db-wal

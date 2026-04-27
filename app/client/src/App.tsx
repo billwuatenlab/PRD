@@ -10,7 +10,7 @@ import SystemPage from './pages/System';
 
 export default function App() {
   return (
-    <ConfigProvider locale={zhTW} theme={{ token: { colorPrimary: '#1890ff' } }}>
+    <ConfigProvider locale={zhTW} theme={{ token: { colorPrimary: '#1890ff', fontSize: 12.32 } }}>
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Dashboard />} />
